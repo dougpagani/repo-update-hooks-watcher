@@ -3,7 +3,7 @@
 cd ~/dotfiles
 export AG_BS_SILENT=true
 
-# tee >(xargs -0 -n1 -I{} echo | sed -u 's_^_FSWATCH:_g') |
+# tee >(xargs -0 -n1 -I{} echo | gsed -u 's_^_FSWATCH:_g') |
 
 # fswatch -0 -x --exclude index.lock $(git ls-files) $(git ls-files --others --exclude-standard) -t | xargs -0 -n1 -I{} -t 'rm' /tmp/bp_total 
 shopt -s expand_aliases
@@ -14,9 +14,9 @@ alias stream_view_blue='while read line; do printf "\e[01;34m%s\e[0m\n" "$line";
 ( sleep 1; touch .bash_eternal_history; ) &
 
 fswatch -0 -x --exclude index.lock $(git ls-files) $(git ls-files --others --exclude-standard) -t \
-    | tee -a >(sed -u -z 's_^_\nFSWATCH:\n_g' | stream_view_red > /dev/tty) \
+    | tee -a >(gsed -u -z 's_^_\nFSWATCH:\n_g' | stream_view_red > /dev/tty) \
     | xargs -0 -n1 -I{} 'repo-update-hooks.sh' {} \
-    | sed -u 's_^_XARGS:_' | stream_view_blue
+    | gsed -u 's_^_XARGS:_' | stream_view_blue
 
 # sed -u is for OUTPUT, not input. Need to make sure you're tracking -0, as
 # well. Can add -t to xargs to see debugging output.
