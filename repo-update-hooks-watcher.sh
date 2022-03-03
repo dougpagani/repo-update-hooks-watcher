@@ -13,7 +13,7 @@ alias stream_view_blue='while read line; do printf "\e[01;34m%s\e[0m\n" "$line";
 # kick it off
 ( sleep 1; touch .bash_eternal_history; ) &
 
-fswatch -0 -x --exclude index.lock $(git ls-files) $(git ls-files --others --exclude-standard) -t \
+/usr/local/bin/fswatch -0 -x --exclude index.lock $(git ls-files) $(git ls-files --others --exclude-standard) -t \
     | tee -a >(gsed -u -z 's_^_\nFSWATCH:\n_g' | stream_view_red > /dev/stdout) \
     | xargs -0 -n1 -I{} 'repo-update-hooks.sh' {} \
     | gsed -u 's_^_XARGS:_' | stream_view_blue
